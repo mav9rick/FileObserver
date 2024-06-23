@@ -18,11 +18,16 @@ void getDirectorySizeByType(const QString &dirPath, QMap<QString, quint64> &size
         }
     }
 }
-QVector<QVector<QString>> FileTypeStrategy::Calculate(QString dir)
+QVector<QVector<QString>> FileTypeStrategy::Calculate(QString dir) const
 {
+    QMap<QString, quint64> sizeMap;
+    getDirectorySizeByType(dir, sizeMap);
 
-
-
-
+    QVector<QVector<QString>> result;
+    for (auto it = sizeMap.begin(); it != sizeMap.end(); ++it)
+    {
+        result.append({it.key(), QString::number(it.value())});
+    }
+    return result;
 }
 

@@ -22,7 +22,15 @@ int getDirectorySize(const QString &dirPath)
     }
     return size;
 }
-QVector<QVector<QString>> FolderStrategy::Calculate(QString directory)
+QVector<QVector<QString>> FolderStrategy::Calculate(QString dir)
 {
-
+    QDir directory(dir);
+    QVector<QVector<QString>> result;
+    QVector<QFileInfo> list = directory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot).toVector();
+    for (const QFileInfo &folderInfo : list)
+    {
+        int size = getDirectorySize(folderInfo.absoluteFilePath());
+        result.append({folderInfo.fileName(), QString::number(size)});
+    }
+    return result;
 }

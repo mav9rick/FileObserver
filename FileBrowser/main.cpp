@@ -11,6 +11,7 @@
 using namespace std;
 int main()
 {
+    QMap<QString, int> map;
     QTextStream input(stdin);
     QTextStream output(stdout);
     output << "Select Strategy (1 for Folder Strategy, 2 for File Type Strategy): ";
@@ -21,6 +22,7 @@ int main()
     output.flush();
     QString dirPath;
     input >> dirPath;
+
     Strategy *strategy = nullptr;
     if (choice == "1")
     {
@@ -35,11 +37,17 @@ int main()
         output << "Invalid choice" << "\n";
         return -1;
     }
-    QVector<QVector<QString>> result = strategy->Calculate(dirPath);
-    for (const QVector<QString> &entry : result)
+
+    int totalSize = strategy->Calculate(dirPath, map);
+
+    output << "Total size calculated: " << totalSize << " bytes" << "\n";
+
+    for (auto it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        output << entry[0] << ": " << entry[1] << " bytes" << "\n";
+        output << it.key() << ": " << it.value() << " bytes" << "\n";
     }
-    delete strategy;
+
+    delete strategy; // Освобождаем выделенную память
+
     return 0;
 }

@@ -6,7 +6,7 @@ class FolderStrategy : public Strategy
 {
 public:
     //using Dirs = QVector<QString>;
-    int Calculate(const QDir& dir) override;
+    int Calculate(const QDir& dir, QMap<QString, int>& fileSizesByType) override;
     static int getDirectorySize(const QString &dirPath);
 };
 

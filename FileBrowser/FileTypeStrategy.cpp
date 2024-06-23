@@ -1,33 +1,27 @@
 #include "FileTypeStrategy.h"
 
-// Функция для подсчета размера файлов по их типам (расширениям) в директории и её поддиректориях
-void getDirectorySizeByType(const QString &dirPath, QMap<QString, quint64> &sizeMap)
+int FileTypeStrategy::Calculate(const QDir &dir, QMap<QString, int>& fileSizesByType)
 {
-    QDir dir(dirPath);
-    QVector<QFileInfo> list = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System).toVector();
+    int totalSize = 0;
+    QFileInfoList list = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     for (const QFileInfo &fileInfo : list)
     {
         if (fileInfo.isDir())
         {
-            getDirectorySizeByType(fileInfo.absoluteFilePath(), sizeMap);
+            QDir subDir(fileInfo.absoluteFilePath());
+            totalSize += Calculate(subDir, fileSizesByType); // Рекурсивный вызов для поддиректорий
         }
         else
         {
-            QString extension = fileInfo.suffix().toLower();
-            sizeMap[extension] += fileInfo.size();
+            QString fileType = fileInfo.suffix(); // Получаем расширение файла
+            if (fileType.isEmpty())
+            {
+                fileType = "no_extension"; // Если файл не имеет расширения
+            }
+            totalSize += fileInfo.size();
+            fileSizesByType[fileType] += fileInfo.size(); // Добавляем размер файла к соответствующему типу
         }
     }
-}
-QVector<QVector<QString>> FileTypeStrategy::Calculate(QString dir) const
-{
-    QMap<QString, quint64> sizeMap;
-    getDirectorySizeByType(dir, sizeMap);
-
-    QVector<QVector<QString>> result;
-    for (auto it = sizeMap.begin(); it != sizeMap.end(); ++it)
-    {
-        result.append({it.key(), QString::number(it.value())});
-    }
-    return result;
+    return totalSize;
 }
 

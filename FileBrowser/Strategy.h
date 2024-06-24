@@ -6,7 +6,6 @@
 class Strategy
 {
 public:
-    //using Dirs = QVector<QString>;
     virtual int Calculate(const QDir& dir, QMap<QString, int>& fileSizesByType) = 0;
 };
 

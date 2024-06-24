@@ -14,6 +14,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    Context.h \
     FileTypeStrategy.h \
     FolderStrategy.h \
     Strategy.h

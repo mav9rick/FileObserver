@@ -1,4 +1,3 @@
-
 #include "FileTypeStrategy.h"
 #include "FolderStrategy.h"
 #include "Strategy.h"
@@ -22,7 +21,6 @@ int main()
     output.flush();
     QString dirPath;
     input >> dirPath;
-
     Strategy *strategy = nullptr;
     if (choice == "1")
     {
@@ -37,17 +35,13 @@ int main()
         output << "Invalid choice" << "\n";
         return -1;
     }
-
     int totalSize = strategy->Calculate(dirPath, map);
-
     output << "Total size calculated: " << totalSize << " bytes" << "\n";
-
     for (auto it = map.constBegin(); it != map.constEnd(); ++it)
     {
         output << it.key() << ": " << it.value() << " bytes" << "\n";
+        output.flush();
     }
-
     delete strategy; // Освобождаем выделенную память
-
     return 0;
 }

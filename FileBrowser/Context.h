@@ -11,7 +11,7 @@ class Context
 {
 public:
     Context(unique_ptr<Strategy> st) : strategy(move(st)) {};
-    void setStrategy(unique_ptr<Strategy> str)
+    void set(unique_ptr<Strategy> str)
     {
         this->strategy = move(str);
     }

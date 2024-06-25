@@ -14,14 +14,22 @@ int FileTypeStrategy::Calculate(const QDir &dir, QMap<QString, int>& fileSizesBy
         else
         {
             QString fileType = fileInfo.suffix(); // Получаем расширение файла
-            if (fileType.isEmpty())
+            if(fileInfo.size() != 0)
             {
-                fileType = "no_extension"; // Если файл не имеет расширения
+                if (fileType.isEmpty())
+                {
+                    fileType = "no_extension"; // Если файл не имеет расширения
+                }
+                totalSize += fileInfo.size();
+                fileSizesByType[fileType] += fileInfo.size(); // Добавляем размер файла к соответствующему типу
             }
-            totalSize += fileInfo.size();
-            fileSizesByType[fileType] += fileInfo.size(); // Добавляем размер файла к соответствующему типу
+            else
+            {
+                totalSize += 0;
+            }
         }
     }
+    //qDebug() << "check////" <<"\n"<< fileSizesByType << "\n" << "check///" << "\n";
     return totalSize;
 }
 
